@@ -3,7 +3,7 @@ import React from 'react'
 function Nav() {
   return (
     <div className=''>
-      <h3>Hos-management</h3>
+      <h3 className='text-xl font-semibold'>Care</h3>
     </div>
   )
 }
