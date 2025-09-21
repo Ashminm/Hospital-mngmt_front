@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+
 function Auth() {
 
-  const HandleLogin = async(e)=>{
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+    role: ""
+  })
+  console.log(userData);
+
+  const HandleLogin = async (e) => {
     e.preventDefault();
+    sessionStorage.setItem("role",userData.role)
     console.log("Login");
     navigate('/Dash', { replace: true })
   }
@@ -21,7 +30,7 @@ function Auth() {
             className="text-center md:text-left flex flex-col justify-center"
           >
             <h1 className="mt-5 mb-4 text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight px-3 text-blue-300">
-            <i className="fa-solid fa-stethoscope text-slate-200"></i> Care
+              <i className="fa-solid fa-stethoscope text-slate-200"></i> Care
             </h1>
             <h1 className="mb-5 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight px-3 text-blue-100">
               The best Medical <br />
@@ -55,6 +64,8 @@ function Auth() {
                         type="email"
                         placeholder="Enter email"
                         className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                        onChange={(e) => { setUserData({ ...userData, email: e.target.value }) }}
+                        value={userData.email}
                       />
                     </Form.Group>
 
@@ -65,44 +76,51 @@ function Auth() {
                         placeholder="Enter password"
                         autoComplete="new-password"
                         className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                        onChange={(e) => { setUserData({ ...userData, password: e.target.value }) }}
+                        value={userData.password}
                       />
                     </Form.Group>
 
-                    <Form.Group className="mb-4 flex items-center justify-between flex-wrap gap-3 space-x-4">
+                    <Form.Group className="mb-4 flex items-center justify-between flex-wrap gap-3 space-x-4" onChange={(e) => { setUserData({ ...userData, role: e.target.value }) }}
+                      value={userData.role}>
                       <Form.Check className='m-0'
                         type="radio"
                         id="doctor"
                         name="role"
+                        value="doctor"
                         label={<span className="text-white">Doctor</span>}
                       />
                       <Form.Check className='m-0'
                         type="radio"
                         id="reception"
                         name="role"
+                        value="reception"
                         label={<span className="text-white">Reception</span>}
                       />
                       <Form.Check className='m-0'
                         type="radio"
                         id="admin"
                         name="role"
+                        value="admin"
                         label={<span className="text-white">Admin</span>}
                       />
                       <Form.Check className='m-0'
                         type="radio"
                         id="patient"
                         name="role"
+                        value="patient"
                         label={<span className="text-white">Patient</span>}
                       />
                     </Form.Group>
 
 
                     <Button
-                    onClick={HandleLogin}
+                      onClick={HandleLogin}
                       variant="primary"
                       type="submit"
                       className="w-full py-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
                     >
-                     Login
+                      Login
                     </Button>
                   </Form>
                 </Card.Body>
