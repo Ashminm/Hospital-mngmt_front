@@ -5,15 +5,15 @@ import Table from 'react-bootstrap/Table';
 function Rooms() {
   return (
     <>
-      <div className="h-screen overflow-auto">
-        <div className='mx-auto p-4'>
+      <div className="h-screen p-4 overflow-auto">
+        <div className='mx-auto'>
           <h3 className="text-xl font-semibold">Room Management</h3>
           <p className='text-gray-400'>Manage staff types, availability, and patient assignment.</p>
         </div>
-        <div className="container flex justify-between flex-col gap-4">
+        <div className="flex justify-between flex-col gap-4">
           <div>
             <h5 className='text-xl font-semibold'>Room Types</h5>
-            <div className="border rounded-md overflow-hidden">
+            <div className="border rounded-md overflow-hidden shadow-md">
               <Table hover responsive className='mb-0'>
                 <thead>
                   <tr>
@@ -77,7 +77,7 @@ function Rooms() {
           </div>
           <div>
             <h5 className='text-xl font-semibold'>Room Availability</h5>
-            <div className="border rounded-md overflow-hidden">
+            <div className="border rounded-md overflow-hidden shadow-md">
               <Table hover responsive className='mb-0'>
                 <thead>
                   <tr>

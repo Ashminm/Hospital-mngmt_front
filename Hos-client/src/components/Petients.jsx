@@ -45,7 +45,7 @@ function Petients() {
           <div className="mt-3">
             <Tab.Content>
               <Tab.Pane eventKey="book">
-                <div className="border rounded-md overflow-hidden">
+                <div className="border rounded-md overflow-hidden shadow-md">
                   <Table hover responsive className='mb-0'>
                     <thead>
                       <tr>
@@ -139,7 +139,7 @@ function Petients() {
               </Tab.Pane>
 
               <Tab.Pane eventKey="reschedule">
-                <div className="border rounded-md overflow-hidden">
+                <div className="border rounded-md overflow-hidden shadow-md">
                   <Table hover responsive className='mb-0'>
                     <thead>
                       <tr>

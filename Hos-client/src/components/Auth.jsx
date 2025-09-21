@@ -13,9 +13,12 @@ function Auth() {
 
   const HandleLogin = async (e) => {
     e.preventDefault();
+    if(!userData.role){
+     return alert("Please select a type");
+    }
     sessionStorage.setItem("role",userData.role)
     console.log("Login");
-    navigate('/Dash', { replace: true })
+    navigate('/dashboard', { replace: true })
   }
 
   const navigate = useNavigate();

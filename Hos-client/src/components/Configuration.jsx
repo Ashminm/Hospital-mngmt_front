@@ -86,7 +86,7 @@ function Configuration() {
 
                 <div>
                   <h5 className="fw-semibold mb-3">Role Permission</h5>
-                  <div className="border rounded overflow-hidden">
+                  <div className="border rounded overflow-hidden shadow-md">
                     <Table hover responsive className="mb-0">
                       <thead>
                         <tr>

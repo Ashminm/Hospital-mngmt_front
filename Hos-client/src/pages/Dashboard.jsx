@@ -10,7 +10,7 @@ import Doctor from "../components/Doctor";
 import Configuration from "../components/Configuration";
 
 function Dashboard() {
-  const role = sessionStorage.getItem("role") || "reception";
+  const role = sessionStorage.getItem("role") || "patient";
 
   const allTabs = {
     admin: [
@@ -68,18 +68,19 @@ function Dashboard() {
 
   return (
     <>
-      <div className="p-4 bg-slate-50">
+      <div className="p-4">
+      {/*  bg-gray- */}
         <NavH />
         <Tab.Container activeKey={activeKey} onSelect={(k) => setActiveKey(k)}>
-          <Row>
-            <Col sm={2} className="d-flex flex-column" style={{ height: "89vh" }}>
+          <Row className="flex-nowrap">
+            <Col xs="auto" className="d-flex flex-column border-r border-slate-300 py-4  h-screen" >
               <Nav
                 variant="pills"
                 className="flex-column justify-between flex-grow-1"
               >
                 <div>
                   {topTabs.map((item) => (
-                    <Nav.Item key={item.key}>
+                    <Nav.Item key={item.key} className="mb-3">
                       <Nav.Link
                         eventKey={item.key}
                         style={{
@@ -88,22 +89,22 @@ function Dashboard() {
                           color: "black",
                           display: "flex",
                           alignItems: "center",
-                          gap: "8px",
+                          gap: "9px",
                           fontWeight: "500",
                         }}
                       >
                         <span className="material-symbols-outlined">
                           {item.icon}
                         </span>
-                        {item.label}
+                        <span className="hidden lg:inline">{item.label}</span>
                       </Nav.Link>
                     </Nav.Item>
                   ))}
                 </div>
 
-                <div>
+                <div >
                   {bottom.map((item) => (
-                    <Nav.Item key={item.key}>
+                    <Nav.Item key={item.key} className="mb-3">
                       <Nav.Link
                         eventKey={item.key}
                         style={{
@@ -119,7 +120,7 @@ function Dashboard() {
                         <span className="material-symbols-outlined">
                           {item.icon}
                         </span>
-                        {item.label}
+                        <span className="hidden lg:inline">{item.label}</span>
                       </Nav.Link>
                     </Nav.Item>
                   ))}
@@ -127,7 +128,7 @@ function Dashboard() {
               </Nav>
             </Col>
 
-            <Col sm={9}>
+            <Col  className="flex-grow-1">
               <Tab.Content>
                 <Tab.Pane eventKey="1"><HomeDash/></Tab.Pane>
                 <Tab.Pane eventKey="2"><Doctor/></Tab.Pane>
