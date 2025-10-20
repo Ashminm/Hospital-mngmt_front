@@ -1,8 +1,28 @@
-import React from 'react'
+import React,{useEffect, useState } from 'react'
 import { Tab, Nav } from "react-bootstrap";
 import { Form } from 'react-bootstrap';
+import { allAppointments } from '../services/CommenApi';
 
 function Appoiments() {
+  const [appointments, setAppointments] = useState([]);
+  useEffect(() => {
+    getAllAp();
+  });
+
+  const getAllAp = async () => {
+    try {
+      const res = await allAppointments();
+      if (res.status === 200) {
+        console.log("Appointments:", res.data);
+        setAppointments(res.data);
+      } else {
+        console.error("Failed to fetch appointments:", res.status);
+      }
+    } catch (err) {
+      console.error("Error fetching appointments:", err);
+    }
+  };
+  
 
   return (
     <>

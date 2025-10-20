@@ -8,6 +8,8 @@ import Rooms from "../components/Rooms";
 import Petients from "../components/Petients";
 import Doctor from "../components/Doctor";
 import Configuration from "../components/Configuration";
+import Logout from "../components/Logout";
+
 
 function Dashboard() {
   const role = sessionStorage.getItem("role") || "patient";
@@ -31,9 +33,9 @@ function Dashboard() {
       { key: "4", label: "Patients", icon: "groups" },
       { key: "6", label: "Rooms", icon: "meeting_room" },
     ],
-    patient: [
-      { key: "7", label: "Configuration", icon: "settings" },
-    ],
+    // patient: [
+    //   { key: "7", label: "Configuration", icon: "settings" },
+    // ],
   };
 
 
@@ -48,10 +50,10 @@ function Dashboard() {
     reception: [
       { key: "8", label: "Logout", icon: "logout" },
     ],
-    patient: [
-      { key: "8", label: "Logout", icon: "logout" },
-      { key: "9", label: "Feedback", icon: "feedback" },
-    ],
+    // patient: [
+    //   { key: "8", label: "Logout", icon: "logout" },
+    //   { key: "9", label: "Feedback", icon: "feedback" },
+    // ],
   };
 
   const topTabs = allTabs[role] || [];
@@ -137,7 +139,7 @@ function Dashboard() {
                 <Tab.Pane eventKey="5"><Staff/></Tab.Pane>
                 <Tab.Pane eventKey="6"><Rooms/></Tab.Pane>
                 <Tab.Pane eventKey="7"><Configuration/></Tab.Pane>
-                <Tab.Pane eventKey="8"> <button className="btn btn-primary">logout</button> </Tab.Pane>
+                <Tab.Pane eventKey="8"> <Logout/></Tab.Pane>
                 <Tab.Pane eventKey="9">Feedback content</Tab.Pane>
               </Tab.Content>
             </Col>

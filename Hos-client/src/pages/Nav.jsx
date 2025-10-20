@@ -8,7 +8,7 @@ function Nav() {
         <i className="fa-solid fa-stethoscope mr-2"></i> Care
       </h3>
       <h4 className="text-gray-400 col-span-1 sm:col-span-5 text-sm sm:text-base">
-        Welcome back Dr. Alex
+        Welcome Alex
       </h4>
       {/* <h5 className="text-gray-400 text-right">A</h5> */}
     </div>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
+import { loginApi } from '../services/CommenApi';
 
 function Auth() {
 
   const [userData, setUserData] = useState({
-    email: "",
+    username: "",
     password: "",
     role: ""
   })
@@ -13,12 +14,22 @@ function Auth() {
 
   const HandleLogin = async (e) => {
     e.preventDefault();
-    if(!userData.role){
-     return alert("Please select a type");
-    }
     sessionStorage.setItem("role",userData.role)
-    console.log("Login");
     navigate('/dashboard', { replace: true })
+    // if(!userData.username || !userData.password){
+    //  return alert("Fill all details");
+    // } else {
+    //   const res= await loginApi(userData)
+    //   if(res.status === 200){
+    //     alert("success")
+    //     sessionStorage.setItem("role",userData.role)
+    //     console.log("Login");
+    //     navigate('/dashboard', { replace: true })
+    //   }else{
+    //     alert("Login faild")
+    //   }
+    // }
+
   }
 
   const navigate = useNavigate();
@@ -62,13 +73,13 @@ function Auth() {
 
                   <Form>
                     <Form.Group className="mb-4 text-left">
-                      <Form.Label className="font-semibold  text-white">Email</Form.Label>
+                      <Form.Label className="font-semibold  text-white">Username</Form.Label>
                       <Form.Control
-                        type="email"
-                        placeholder="Enter email"
+                        type="text"
+                        placeholder="Enter username"
                         className="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                        onChange={(e) => { setUserData({ ...userData, email: e.target.value }) }}
-                        value={userData.email}
+                        onChange={(e) => { setUserData({ ...userData, username: e.target.value }) }}
+                        value={userData.username}
                       />
                     </Form.Group>
 
@@ -107,13 +118,13 @@ function Auth() {
                         value="admin"
                         label={<span className="text-white">Admin</span>}
                       />
-                      <Form.Check className='m-0'
+                      {/* <Form.Check className='m-0'
                         type="radio"
                         id="patient"
                         name="role"
                         value="patient"
                         label={<span className="text-white">Patient</span>}
-                      />
+                      /> */}
                     </Form.Group>
 
 
