@@ -59,7 +59,6 @@ function Appoiments() {
     try {
       const res = await allAppointments(headers);
       if (res.status === 200) {
-        // console.log("Appointments:", res.data);
         setAppointments(res.data);
       } else {
         console.log("Failed to fetch appointments:", res);

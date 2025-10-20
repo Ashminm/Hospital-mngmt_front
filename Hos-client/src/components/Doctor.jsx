@@ -8,13 +8,13 @@ function Doctor() {
   const [doc, setDoc] = useState([]);
   const [token, setToken] = useState("");
   const [docDetails, setDocDetails] = useState({
-    department: "Cardiology",
-    doctor: "Card Doc",
-    date: "30-02-2025",
-    time: "02-30",
-    reason: "Lorem"
+    department: "",
+    doctor: "",
+    date: "",
+    time: "",
+    reason: ""
   })
-  console.log("Doc= ", doc);
+  console.log("Doc= ", docDetails);
 
   const options = [
     { value: "cardiology", label: "Cardiology" },
@@ -40,7 +40,6 @@ function Doctor() {
       getAllDoc()
     }
     console.log(token);
-
   }, [token]);
 
   const getAllDoc = async () => {
@@ -62,31 +61,29 @@ function Doctor() {
 
   const handleDoc = async (e) => {
     e.preventDefault();
-    console.log("Prev=", docDetails);
+    // console.log("Prev=", docDetails);
 
-    if (!docDetails.department) {
-      return toast.error("Please fill the details!");
-    } else {
-      const res = await postDoc(docDetails)
-      if (res.status === 200) {
-        toast.success("Scheduled!")
-        console.log("Succ= ", res);
+    // if (!docDetails.department) {
+    //   return toast.error("Please fill the details!");
+    // } else {
+    //   const res = await postDoc(docDetails)
+    //   if (res.status === 200) {
+    //     toast.success("Scheduled!")
+    //     console.log("Succ= ", res);
 
-      } else {
-        toast.error("Scheduled Faild!")
-        console.log(res);
+    //   } else {
+    //     toast.error("Scheduled Faild!")
+    //     console.log(res);
 
 
-      }
-    }
+    //   }
+    // }
   }
 
   return (
     <>
       <div className="mx-auto p-4">
         <h3 className="text-xl font-semibold">Doctor Management</h3>
-        {/* <p className="text-gray-500 mb-4">Manage your appointments</p> */}
-
         <Tab.Container defaultActiveKey="book">
 
           <Nav
@@ -212,8 +209,8 @@ function Doctor() {
                     placeholder="Select Department"
                     isSearchable
                     styles={styles}
-                    onChange={(e) => { setDocDetails({ ...docDetails, department: e.target.value }) }}
-                    value={docDetails.department}
+                    onChange={(opt) => setDocDetails({ ...docDetails, department: opt?.value || "" })}
+                    value={options.find(o => o.value === docDetails.department) || null}
                   />
                   <select className="w-96 border rounded p-2" onChange={(e) => { setDocDetails({ ...docDetails, doctor: e.target.value }) }}
                     value={docDetails.doctor}>
