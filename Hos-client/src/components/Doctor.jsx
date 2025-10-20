@@ -1,8 +1,21 @@
 import React from 'react'
-import { Tab, Nav } from "react-bootstrap";
-import Table from 'react-bootstrap/Table';
+import { Tab, Nav, Table } from "react-bootstrap";
+import Select from "react-select";
 
 function Doctor() {
+  const options = [
+    { value: "cardiology", label: "Cardiology" },
+    { value: "neurology", label: "Neurology" },
+    { value: "orthopedics", label: "Orthopedics" },
+    { value: "pediatrics", label: "Pediatrics" },
+    { value: "radiology", label: "Radiology" },
+  ];
+
+  const styles = {
+    control: (base) => ({ ...base, width: "24rem" }),
+    menu: (base) => ({ ...base, width: "24rem" }),
+  };
+
   return (
     <>
       <div className="mx-auto p-4">
@@ -129,9 +142,12 @@ function Doctor() {
 
               <Tab.Pane eventKey="reschedule">
                 <form className="space-y-3 flex flex-col">
-                  <select className="w-96 border rounded p-2">
-                    <option>Select Department</option>
-                  </select>
+                  <Select
+                    options={options}
+                    placeholder="Select Department"
+                    isSearchable
+                    styles={styles}
+                  />
                   <select className="w-96 border rounded p-2">
                     <option>Select Doctor</option>
                   </select>
@@ -149,7 +165,7 @@ function Doctor() {
                   />
                   <div className="">
                     <button className="bg-blue-600 text-white px-4 py-2 rounded">
-                      Reschedule Appointment
+                      Schedule
                     </button>
                   </div>
                 </form>

@@ -14,7 +14,7 @@ function Auth() {
 
   const HandleLogin = async (e) => {
     e.preventDefault();
-    sessionStorage.setItem("role",userData.role)
+    sessionStorage.setItem("role", userData.role)
     navigate('/dashboard', { replace: true })
     // if(!userData.username || !userData.password){
     //  return alert("Fill all details");
@@ -99,6 +99,20 @@ function Auth() {
                       value={userData.role}>
                       <Form.Check className='m-0'
                         type="radio"
+                        id="manager"
+                        name="role"
+                        value="manager"
+                        label={<span className="text-white">Manager</span>}
+                      />
+                      <Form.Check className='m-0'
+                        type="radio"
+                        id="admin"
+                        name="role"
+                        value="admin"
+                        label={<span className="text-white">Admin</span>}
+                      />
+                      <Form.Check className='m-0'
+                        type="radio"
                         id="doctor"
                         name="role"
                         value="doctor"
@@ -111,13 +125,7 @@ function Auth() {
                         value="reception"
                         label={<span className="text-white">Reception</span>}
                       />
-                      <Form.Check className='m-0'
-                        type="radio"
-                        id="admin"
-                        name="role"
-                        value="admin"
-                        label={<span className="text-white">Admin</span>}
-                      />
+
                       {/* <Form.Check className='m-0'
                         type="radio"
                         id="patient"

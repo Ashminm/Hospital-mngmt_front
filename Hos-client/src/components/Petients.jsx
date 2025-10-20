@@ -31,14 +31,7 @@ function Petients() {
                 Medical History
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="view"
-                className="!border-none !bg-transparent !px-2 !py-1 !text-gray-600 hover:!text-blue-600"
-              >
-                Doctor Assignments
-              </Nav.Link>
-            </Nav.Item>
+           
           </Nav>
 
 
@@ -202,69 +195,7 @@ function Petients() {
                 </div>
               </Tab.Pane>
 
-              <Tab.Pane eventKey="view">
-                <div className="border rounded-md overflow-hidden">
-                  <Table hover responsive className='mb-0'>
-                    <thead>
-                      <tr>
-                        <th>Room Type</th>
-                        <th>Description</th>
-                        <th>Capacity</th>
-                        <th>Availability</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>Otto</td>
-                        <td>20</td>
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-              </Tab.Pane>
+             
             </Tab.Content>
           </div>
         </Tab.Container>

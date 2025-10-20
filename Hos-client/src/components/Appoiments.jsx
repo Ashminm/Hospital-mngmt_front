@@ -1,28 +1,60 @@
-import React,{useEffect, useState } from 'react'
-import { Tab, Nav } from "react-bootstrap";
-import { Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Tab, Nav, Form } from "react-bootstrap";
+import Select from "react-select";
+
 import { allAppointments } from '../services/CommenApi';
 
 function Appoiments() {
+  const Deoptions = [
+    { value: "cardiology", label: "Cardiology" },
+    { value: "neurology", label: "Neurology" },
+    { value: "orthopedics", label: "Orthopedics" },
+    { value: "pediatrics", label: "Pediatrics" },
+    { value: "radiology", label: "Radiology" },
+  ];
+
+  const Droptions = [
+    { value: "Dr.Alex", label: "Dr.Alex" },
+    { value: "Dr.Liya", label: "Dr.Liya" },
+    { value: "Dr.Rosh", label: "Dr.Rosh" },
+    { value: "Dr.Mim", label: "Dr.Mim" },
+    { value: "Dr.Rosh", label: "Dr.Rosh" },
+  ];
+
+  const Proptions = [
+    { value: "Alex", label: "Alex" },
+    { value: "Dr.Liya", label: "Liya" },
+    { value: "Rosh", label: "Rosh" },
+    { value: "Mim", label: "Mim" },
+    { value: "Rosh", label: "Rosh" },
+  ];
+
+  const styles = {
+    control: (base) => ({ ...base, width: "24rem" }),
+    menu: (base) => ({ ...base, width: "24rem" }),
+  };
+
+
+
   const [appointments, setAppointments] = useState([]);
   useEffect(() => {
     getAllAp();
   });
 
   const getAllAp = async () => {
-    try {
-      const res = await allAppointments();
-      if (res.status === 200) {
-        console.log("Appointments:", res.data);
-        setAppointments(res.data);
-      } else {
-        console.error("Failed to fetch appointments:", res.status);
-      }
-    } catch (err) {
-      console.error("Error fetching appointments:", err);
-    }
+    // try {
+    //   const res = await allAppointments();
+    //   if (res.status === 200) {
+    //     console.log("Appointments:", res.data);
+    //     setAppointments(res.data);
+    //   } else {
+    //     console.error("Failed to fetch appointments:", res.status);
+    //   }
+    // } catch (err) {
+    //   console.error("Error fetching appointments:", err);
+    // }
   };
-  
+
 
   return (
     <>
@@ -44,14 +76,7 @@ function Appoiments() {
                 Book Appointment
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="reschedule"
-                className="!border-none !bg-transparent !px-2 !py-1 !text-gray-600 hover:!text-blue-600"
-              >
-                Reschedule Appointment
-              </Nav.Link>
-            </Nav.Item>
+           
             <Nav.Item>
               <Nav.Link
                 eventKey="view"
@@ -63,85 +88,114 @@ function Appoiments() {
           </Nav>
 
 
-          <div className="mt-3 w-96">
+          <div className="mt-3">
             <Tab.Content>
               <Tab.Pane eventKey="book">
                 <Form className="p-3">
                   <Form.Group className="mb-3" controlId="departmentSelect">
                     <Form.Label>Select Department</Form.Label>
-                    <Form.Select>
-                      <option>Select Department</option>
-                      <option>Cardiology</option>
-                      <option>Neurology</option>
-                      <option>Orthopedics</option>
-                    </Form.Select>
+                    <Select
+                      options={Deoptions}
+                      placeholder="Select Department"
+                      isSearchable
+                      styles={styles}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3" controlId="doctorSelect">
                     <Form.Label>Select Doctor</Form.Label>
-                    <Form.Select>
-                      <option>Select Doctor</option>
-                      <option>Dr. John</option>
-                      <option>Dr. Sarah</option>
-                      <option>Dr. Alex</option>
-                    </Form.Select>
+                    <Select
+                      options={Droptions}
+                      placeholder="Select Doctor"
+                      isSearchable
+                      styles={styles}
+                    />
                   </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentDate">
+                  <Form.Group className="mb-3" controlId="doctorSelect">
+                    <Form.Label>Select Patient</Form.Label>
+                    <Select
+                      options={Proptions}
+                      placeholder="Select Patient"
+                      isSearchable
+                      styles={styles}
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3 w-96" controlId="appointmentDate">
                     <Form.Label>Date</Form.Label>
                     <Form.Control type="date" />
                   </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentTime">
+                  <Form.Group className="mb-3 w-96" controlId="appointmentTime">
                     <Form.Label>Time</Form.Label>
                     <Form.Control type="time" />
                   </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentReason">
-                    <Form.Label>Reason for Appointment</Form.Label>
-                    <Form.Control as="textarea" rows={3} placeholder="Enter reason" />
-                  </Form.Group>
+
                   <button className='btn btn-primary' type="submit">
-                    Reschedule Appointment
+                    Schedule
                   </button>
                 </Form>
               </Tab.Pane>
 
-              <Tab.Pane eventKey="reschedule">
-                <Form className="p-3">
-                  <Form.Group className="mb-3" controlId="departmentSelect">
-                    <Form.Label>Select Department</Form.Label>
-                    <Form.Select>
-                      <option>Select Department</option>
-                      <option>Cardiology</option>
-                      <option>Neurology</option>
-                      <option>Orthopedics</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="doctorSelect">
-                    <Form.Label>Select Doctor</Form.Label>
-                    <Form.Select>
-                      <option>Select Doctor</option>
-                      <option>Dr. John</option>
-                      <option>Dr. Sarah</option>
-                      <option>Dr. Alex</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentDate">
-                    <Form.Label>Date</Form.Label>
-                    <Form.Control type="date" />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentTime">
-                    <Form.Label>Time</Form.Label>
-                    <Form.Control type="time" />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="appointmentReason">
-                    <Form.Label>Reason for Appointment</Form.Label>
-                    <Form.Control as="textarea" rows={3} placeholder="Enter reason" />
-                  </Form.Group>
-                  <button className='btn btn-primary' type="submit">
-                    Reschedule Appointment
-                  </button>
-                </Form>
-              </Tab.Pane>
+
               <Tab.Pane eventKey="view">
-                View appoiment
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                  {/* Appointment 1 */}
+                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
+                    <p><span className="font-semibold text-gray-700">ID:</span> A001</p>
+                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1001</p>
+                    <p><span className="font-semibold text-gray-700">Department:</span> Cardiology</p>
+                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Meera Nair</p>
+                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-22</p>
+                    <p><span className="font-semibold text-gray-700">Time:</span> 10:30 AM</p>
+
+                    <div className="flex justify-end gap-2 mt-3">
+                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
+                        Reschedule
+                      </button>
+                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Appointment 2 */}
+                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
+                    <p><span className="font-semibold text-gray-700">ID:</span> A002</p>
+                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1002</p>
+                    <p><span className="font-semibold text-gray-700">Department:</span> Orthopedics</p>
+                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Ravi Menon</p>
+                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-23</p>
+                    <p><span className="font-semibold text-gray-700">Time:</span> 11:00 AM</p>
+
+                    <div className="flex justify-end gap-2 mt-3">
+                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
+                        Reschedule
+                      </button>
+                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Appointment 3 */}
+                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
+                    <p><span className="font-semibold text-gray-700">ID:</span> A003</p>
+                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1003</p>
+                    <p><span className="font-semibold text-gray-700">Department:</span> Dermatology</p>
+                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Anjali Das</p>
+                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-24</p>
+                    <p><span className="font-semibold text-gray-700">Time:</span> 09:45 AM</p>
+
+                    <div className="flex justify-end gap-2 mt-3">
+                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
+                        Reschedule
+                      </button>
+                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
               </Tab.Pane>
             </Tab.Content>
           </div>
