@@ -5,24 +5,14 @@ import { allDoc, postDoc } from '../services/CommenApi';
 import toast from 'react-hot-toast';
 
 function Doctor() {
-  const [doc, setDoc] = useState([]);
+  const [Alldoc, setAllDoc] = useState([]);
   const [token, setToken] = useState("");
   const [docDetails, setDocDetails] = useState({
-    department: "",
-    doctor: "",
-    date: "",
-    time: "",
-    reason: ""
+    doctorName: "testNameF",
+    patientName: "TestName",
+    appointmentDate: "30-02-2025",
+    appointmentTime: "02-30"
   })
-  console.log("Doc= ", docDetails);
-
-  const options = [
-    { value: "cardiology", label: "Cardiology" },
-    { value: "neurology", label: "Neurology" },
-    { value: "orthopedics", label: "Orthopedics" },
-    { value: "pediatrics", label: "Pediatrics" },
-    { value: "radiology", label: "Radiology" },
-  ];
 
   const styles = {
     control: (base) => ({ ...base, width: "24rem" }),
@@ -39,7 +29,6 @@ function Doctor() {
     if (token) {
       getAllDoc()
     }
-    console.log(token);
   }, [token]);
 
   const getAllDoc = async () => {
@@ -50,7 +39,7 @@ function Doctor() {
     try {
       const res = await allDoc(headers);
       if (res.status === 200) {
-        setDoc(res.data);
+        setAllDoc(res.data);
       } else {
         console.log("Failed to fetch doc:", res);
       }
@@ -61,15 +50,19 @@ function Doctor() {
 
   const handleDoc = async (e) => {
     e.preventDefault();
-    // console.log("Prev=", docDetails);
+    // console.log(docDetails);
 
-    // if (!docDetails.department) {
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // if (!docDetails.doctorName) {
     //   return toast.error("Please fill the details!");
     // } else {
-    //   const res = await postDoc(docDetails)
+    //   const res = await postDoc(docDetails,headers)
     //   if (res.status === 200) {
     //     toast.success("Scheduled!")
-    //     console.log("Succ= ", res);
+    //     console.log("SuccAll= ", res);
 
     //   } else {
     //     toast.error("Scheduled Faild!")
@@ -98,7 +91,7 @@ function Doctor() {
                 Profile
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
+            {/* <Nav.Item>
               <Nav.Link
                 eventKey="reschedule"
                 className="!border-none !bg-transparent !px-2 !py-1 !text-gray-600 hover:!text-blue-600"
@@ -113,7 +106,7 @@ function Doctor() {
               >
                 Receptionist Assignments
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
           </Nav>
           <div className="mt-3">
             <Tab.Content>
@@ -122,87 +115,42 @@ function Doctor() {
                   <Table hover responsive className='mb-0'>
                     <thead>
                       <tr>
-                        <th>Doctor Name</th>
-                        <th>Specialization</th>
-                        <th>Contact</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th className="px-4 py-2 font-semibold">INDEX</th>
+                        <th className="px-4 py-2 font-semibold">ID</th>
+                        <th className="px-4 py-2 font-semibold">Doctor Name</th>
+                        <th className="px-4 py-2 font-semibold">Department</th>
+                        <th className="px-4 py-2 font-semibold">Status</th>
+                        <th className="px-4 py-2 font-semibold">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Mark</td>
-                        <td>Mark</td>
+                      {Alldoc.map((doc,index) => (
+                        <tr key={index} className="border-t">
+                          <td className="px-4 py-2">{index}</td>
+                          <td className="px-4 py-2">{doc.user_id}</td>
+                          <td className="px-4 py-2">{doc.firstName} {doc.lastName}</td>
+                          <td className="px-4 py-2">{doc.dept}</td>
+                          <td className="px-4 py-2">
+                            <span
+                              className={`p-1 px-3 rounded-md text-sm ${doc.status === "Available"
+                                  ? "bg-green-200 text-green-700"
+                                  : "bg-slate-200 text-gray-600"
+                                }`}
+                            >
+                              {doc.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2"><button className='btn btn-danger'>Delete</button></td>
+                      
+                        </tr>
+                      ))}
 
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-                      </tr>
                     </tbody>
                   </Table>
                 </div>
               </Tab.Pane>
 
-              <Tab.Pane eventKey="reschedule">
+              {/* <Tab.Pane eventKey="reschedule">
                 <form className="space-y-3 flex flex-col">
                   <Select
                     options={options}
@@ -215,6 +163,7 @@ function Doctor() {
                   <select className="w-96 border rounded p-2" onChange={(e) => { setDocDetails({ ...docDetails, doctor: e.target.value }) }}
                     value={docDetails.doctor}>
                     <option>Select Doctor</option>
+                    <option>one</option>
                   </select>
                   <input
                     type="date"
@@ -244,7 +193,7 @@ function Doctor() {
 
               <Tab.Pane eventKey="view">
                 View appoiment
-              </Tab.Pane>
+              </Tab.Pane> */}
             </Tab.Content>
           </div>
         </Tab.Container>

@@ -1,36 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Tab, Nav, Form } from "react-bootstrap";
 import Select from "react-select";
-import { allAppointments } from '../services/CommenApi';
+import { allAppointments, allDoc, allPatients } from '../services/CommenApi';
 
 function Appoiments() {
+  const [Alldoc, setAllDoc] = useState([]);
+  const [AllPati, setAllPati] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [token, setToken] = useState("");
-// console.log("App=",appointments);
-
-  const Deoptions = [
-    { value: "cardiology", label: "Cardiology" },
-    { value: "neurology", label: "Neurology" },
-    { value: "orthopedics", label: "Orthopedics" },
-    { value: "pediatrics", label: "Pediatrics" },
-    { value: "radiology", label: "Radiology" },
-  ];
-
-  const Droptions = [
-    { value: "Dr.Alex", label: "Dr.Alex" },
-    { value: "Dr.Liya", label: "Dr.Liya" },
-    { value: "Dr.Rosh", label: "Dr.Rosh" },
-    { value: "Dr.Mim", label: "Dr.Mim" },
-    { value: "Dr.Rosh", label: "Dr.Rosh" },
-  ];
-
-  const Proptions = [
-    { value: "Alex", label: "Alex" },
-    { value: "Dr.Liya", label: "Liya" },
-    { value: "Rosh", label: "Rosh" },
-    { value: "Mim", label: "Mim" },
-    { value: "Rosh", label: "Rosh" },
-  ];
 
   const styles = {
     control: (base) => ({ ...base, width: "24rem" }),
@@ -43,13 +20,13 @@ function Appoiments() {
     }
   }, [])
 
-
-  
   useEffect(() => {
-    if(token){
+    if (token) {
       getAllAp();
-    } 
-  },[token]);
+      getAllDoc()
+      getAllPatients()
+    }
+  }, [token]);
 
   const getAllAp = async () => {
     const headers = {
@@ -68,6 +45,59 @@ function Appoiments() {
     }
   };
 
+  const getAllDoc = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await allDoc(headers);
+      if (res.status === 200) {
+        setAllDoc(res.data)
+      } else {
+        console.log("Failed to fetch doc:", res);
+      }
+    } catch (err) {
+      console.log("Error fetching doc:", err);
+    }
+  };
+  const getAllPatients = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await allPatients(headers);
+      if (res.status === 200) {
+        setAllPati(res.data)
+      } else {
+        console.log("Failed to fetch doc:", res);
+      }
+    } catch (err) {
+      console.log("Error fetching doc:", err);
+    }
+  };
+
+  const docName = useMemo(() => {
+    return Alldoc.map((doc) => ({
+      value: doc.firstName,
+      label: doc.firstName,
+    }));
+  }, [Alldoc]);
+
+  const docDepart = useMemo(() => {
+    return Alldoc.map((dep) => ({
+      value: dep.dept,
+      label: dep.dept,
+    }));
+  }, [Alldoc]);
+
+  const patientName = useMemo(() => {
+    return AllPati.map((pe) => ({
+      value: pe.firstName,
+      label: pe.firstName,
+    }));
+  }, [AllPati]);
 
   return (
     <>
@@ -89,7 +119,7 @@ function Appoiments() {
                 Book Appointment
               </Nav.Link>
             </Nav.Item>
-           
+
             <Nav.Item>
               <Nav.Link
                 eventKey="view"
@@ -108,7 +138,7 @@ function Appoiments() {
                   <Form.Group className="mb-3" controlId="departmentSelect">
                     <Form.Label>Select Department</Form.Label>
                     <Select
-                      options={Deoptions}
+                      options={docDepart}
                       placeholder="Select Department"
                       isSearchable
                       styles={styles}
@@ -117,7 +147,7 @@ function Appoiments() {
                   <Form.Group className="mb-3" controlId="doctorSelect">
                     <Form.Label>Select Doctor</Form.Label>
                     <Select
-                      options={Droptions}
+                      options={docName}
                       placeholder="Select Doctor"
                       isSearchable
                       styles={styles}
@@ -126,7 +156,7 @@ function Appoiments() {
                   <Form.Group className="mb-3" controlId="doctorSelect">
                     <Form.Label>Select Patient</Form.Label>
                     <Select
-                      options={Proptions}
+                      options={patientName}
                       placeholder="Select Patient"
                       isSearchable
                       styles={styles}
@@ -151,62 +181,46 @@ function Appoiments() {
               <Tab.Pane eventKey="view">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                  {/* Appointment 1 */}
-                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
-                    <p><span className="font-semibold text-gray-700">ID:</span> A001</p>
-                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1001</p>
-                    <p><span className="font-semibold text-gray-700">Department:</span> Cardiology</p>
-                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Meera Nair</p>
-                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-22</p>
-                    <p><span className="font-semibold text-gray-700">Time:</span> 10:30 AM</p>
+                  {appointments.map((app, index) => (
+                    <div
+                      key={index}
+                      className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition"
+                    >
+                      <p>
+                        <span className="font-semibold text-gray-700">Patient Name:</span>{" "}
+                        {app.patientName}
+                      </p>
+                      {/* <p>
+                        <span className="font-semibold text-gray-700">Department:</span>{" "}
+                        {app.department}
+                      </p> */}
+                      <p>
+                        <span className="font-semibold text-gray-700">Doctor:</span>{" "}
+                        {app.doctorName}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-gray-700">Date:</span> {app.date}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-gray-700">Time:</span> {app.time}
+                      </p>
+                      <p>
+                        <span className="font-semibold text-gray-700">Status:</span> {app.status}
+                      </p>
 
-                    <div className="flex justify-end gap-2 mt-3">
-                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
-                        Reschedule
-                      </button>
-                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
-                        Delete
-                      </button>
+                      <div className="flex justify-end gap-2 mt-3">
+                        <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
+                          Reschedule
+                        </button>
+                        <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ))}
 
-                  {/* Appointment 2 */}
-                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
-                    <p><span className="font-semibold text-gray-700">ID:</span> A002</p>
-                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1002</p>
-                    <p><span className="font-semibold text-gray-700">Department:</span> Orthopedics</p>
-                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Ravi Menon</p>
-                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-23</p>
-                    <p><span className="font-semibold text-gray-700">Time:</span> 11:00 AM</p>
 
-                    <div className="flex justify-end gap-2 mt-3">
-                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
-                        Reschedule
-                      </button>
-                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
-                        Delete
-                      </button>
-                    </div>
-                  </div>
 
-                  {/* Appointment 3 */}
-                  <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 hover:shadow-md transition">
-                    <p><span className="font-semibold text-gray-700">ID:</span> A003</p>
-                    <p><span className="font-semibold text-gray-700">Appointment No:</span> 1003</p>
-                    <p><span className="font-semibold text-gray-700">Department:</span> Dermatology</p>
-                    <p><span className="font-semibold text-gray-700">Doctor:</span> Dr. Anjali Das</p>
-                    <p><span className="font-semibold text-gray-700">Date:</span> 2025-10-24</p>
-                    <p><span className="font-semibold text-gray-700">Time:</span> 09:45 AM</p>
-
-                    <div className="flex justify-end gap-2 mt-3">
-                      <button className="bg-blue-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-600 transition">
-                        Reschedule
-                      </button>
-                      <button className="bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition">
-                        Delete
-                      </button>
-                    </div>
-                  </div>
 
                 </div>
               </Tab.Pane>

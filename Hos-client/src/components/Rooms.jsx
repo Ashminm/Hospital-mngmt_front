@@ -1,10 +1,42 @@
-import React, { useState } from 'react'
-import { Form ,Table} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'
+import { Form, Table } from 'react-bootstrap';
 import Select from "react-select";
+import { allRooms } from '../services/CommenApi';
 
 function Rooms() {
   const [Optype, setOpType] = useState("");
-  
+  const [token, setToken] = useState("");
+  const [AllRoom, setAllRoom] = useState([]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setToken(sessionStorage.getItem("token"))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      getAllRooms()
+    }
+  }, [token]);
+
+  const getAllRooms = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await allRooms(headers);
+      if (res.status === 200) {
+        setAllRoom(res.data)
+      } else {
+        console.log("Failed to fetch doc:", res);
+      }
+    } catch (err) {
+      console.log("Error fetching doc:", err);
+    }
+  };
+
   const Deoptions = [
     { value: "cardiology", label: "Cardiology" },
     { value: "neurology", label: "Neurology" },
@@ -76,16 +108,16 @@ function Rooms() {
                     <option value="3">Three</option>
                   </Form.Select>
                   <button
-                className='btn btn-primary'
-              >
-                Create
-              </button>
+                    className='btn btn-primary'
+                  >
+                    Create
+                  </button>
                 </>
               )}
               {Optype === "assignroom" && (
                 <>
                   <label>Patient</label>
-                <Select
+                  <Select
                     options={Paoptions}
                     placeholder="Select Patient"
                     isSearchable
@@ -93,7 +125,7 @@ function Rooms() {
                     className='mb-3'
                   />
                   <label>Department</label>
-                <Select
+                  <Select
                     options={Deoptions}
                     placeholder="Select Department"
                     isSearchable
@@ -116,10 +148,10 @@ function Rooms() {
                     <option value="2">Two</option>
                   </Form.Select>
                   <button
-                className='btn btn-primary'
-              >
-                Create
-              </button>
+                    className='btn btn-primary'
+                  >
+                    Create
+                  </button>
                 </>
               )}
             </div>
@@ -127,138 +159,44 @@ function Rooms() {
         </div>
 
         <div className="flex justify-between flex-col gap-4">
-          <div>
-            <h5 className='text-xl font-semibold'>Room Types</h5>
-            <div className="border rounded-md overflow-hidden shadow-md">
-              <Table hover responsive className='mb-0'>
-                <thead>
-                  <tr>
-                    <th>Room Number</th>
-                    <th>Type</th>
-                    <th>Flour</th>
-                    <th>Capacity</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>Otto</td>
-                    <td>Otto</td>
-                    <td>20</td>
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>20</td>
 
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>20</td>
-
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>Thornton</td>
-                    <td>20</td>
-
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@fat</td>
-                    <td>20</td>
-
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@fat</td>
-                    <td>20</td>
-
-                  </tr>
-                  <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>@fat</td>
-                    <td>20</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>
-          </div>
           <div>
             <h5 className='text-xl font-semibold'>Room Availability</h5>
             <div className="border rounded-md overflow-hidden shadow-md">
               <Table hover responsive className='mb-0'>
                 <thead>
                   <tr>
+                    <th>Index</th>
+                    <th>ID</th>
                     <th>Room Number</th>
-                    <th>Type</th>
+                    <th>Floor</th>
                     <th>Status</th>
-                    <th>Patient</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Otto</td>
-                  </tr>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Thornton</td>
+                  {AllRoom.map((Roo, index) => (
+                    <tr  key={index} className="border-t">
+                      <td>{index}</td>
+                      <td>{Roo.room_id}</td>
+                      <td>{Roo.room_number}</td>
+                      <td>{Roo.floor}</td>
+                      <td>
+                            <span
+                              className={`p-1 px-3 rounded-md text-sm ${Roo.status === "Active"
+                                  ? "bg-green-200 text-green-700"
+                                  : "bg-slate-200 text-gray-600"
+                                }`}
+                            >
+                              {Roo.status}
+                            </span>
+                          </td>
+                      <td><button className='btn btn-danger'>Delete</button></td>
 
-                  </tr>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Thornton</td>
+                    </tr>
+                  ))}
 
-                  </tr>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Thornton</td>
 
-                  </tr>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Alex</td>
-
-                  </tr>
-                  <tr>
-                    <td>101</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Alex</td>
-
-                  </tr>
-                  <tr>
-                    <td>J01</td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>ICU</span></td>
-                    <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                    <td>Alex</td>
-                  </tr>
                 </tbody>
               </Table>
             </div>

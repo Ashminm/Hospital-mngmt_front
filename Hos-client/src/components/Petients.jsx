@@ -1,8 +1,41 @@
-import React from 'react'
+import React,{ useEffect, useState } from 'react'
 import { Tab, Nav } from "react-bootstrap";
 import Table from 'react-bootstrap/Table';
+import { allPatients } from '../services/CommenApi';
 
 function Petients() {
+  const [token, setToken] = useState("");
+  const [AllPati, setAllPati] = useState([]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setToken(sessionStorage.getItem("token"))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      getAllPatients()
+    }
+  }, [token]);
+
+  const getAllPatients = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await allPatients(headers);
+      if (res.status === 200) {
+        setAllPati(res.data)
+      } else {
+        console.log("Failed to fetch doc:", res);
+      }
+    } catch (err) {
+      console.log("Error fetching doc:", err);
+    }
+  };
+
   return (
     <>
       <div className="mx-auto p-4">
@@ -42,154 +75,69 @@ function Petients() {
                   <Table hover responsive className='mb-0'>
                     <thead>
                       <tr>
-                        <th>Patient ID</th>
-                        <th>Name</th>
-                        <th>DOB</th>
-                        <th>Gender</th>
-                        <th>Contact</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        {/* <th className="px-4 py-2 font-semibold">Index</th> */}
+                        <th className="px-4 py-2 font-semibold">ID</th>
+                        <th className="px-4 py-2 font-semibold">Name</th>
+                        <th className="px-4 py-2 font-semibold">DOB</th>
+                        <th className="px-4 py-2 font-semibold">email</th>
+                        <th className="px-4 py-2 font-semibold">phone</th>
+                        <th className="px-4 py-2 font-semibold">address</th>
+                        <th className="px-4 py-2 font-semibold">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Mark</td>
-                        <td>Mark</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
+                    {AllPati.map((pat,index) => (
+                        <tr key={index} className="border-t">
+                          {/* <td className="px-4 py-2">{index}</td> */}
+                          <td className="px-4 py-2">{pat.id}</td>
+                          <td className="px-4 py-2">{pat.firstName} {pat.lastName}</td>
+                          <td className="px-4 py-2">{pat.dateOfBirth}</td>
+                          <td className="px-4 py-2">{pat.email}</td>
+                          <td className="px-4 py-2">{pat.phoneNo}</td>
+                          <td className="px-4 py-2">{pat.address}</td>
+              
+                          <td className="px-4 py-2"><button className='btn btn-danger'>Delete</button></td>
+                      
+                        </tr>
+                      ))}
 
-                        <td>20</td>
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td><span className='bg-slate-200 p-1 px-3 rounded-md text-gray-600 text-sm'>Completed</span></td>
-
-                        <td>20</td>
-                      </tr>
+                      
                     </tbody>
                   </Table>
                 </div>
               </Tab.Pane>
-
               <Tab.Pane eventKey="reschedule">
                 <div className="border rounded-md overflow-hidden shadow-md">
                   <Table hover responsive className='mb-0'>
                     <thead>
                       <tr>
-                        <th>Room Type</th>
-                        <th>Description</th>
-                        <th>Capacity</th>
-                        <th>Availability</th>
+                        {/* <th className="px-4 py-2 font-semibold">Index</th> */}
+                        <th className="px-4 py-2 font-semibold">ID</th>
+                        <th className="px-4 py-2 font-semibold">Name</th>
+                        <th className="px-4 py-2 font-semibold">DOB</th>
+                        <th className="px-4 py-2 font-semibold">email</th>
+                        <th className="px-4 py-2 font-semibold">phone</th>
+                        <th className="px-4 py-2 font-semibold">address</th>
+                        <th className="px-4 py-2 font-semibold">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>Otto</td>
-                        <td>20</td>
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>20</td>
+                    {AllPati.map((pat,index) => (
+                        <tr key={index} className="border-t">
+                          {/* <td className="px-4 py-2">{index}</td> */}
+                          <td className="px-4 py-2">{pat.id}</td>
+                          <td className="px-4 py-2">{pat.firstName} {pat.lastName}</td>
+                          <td className="px-4 py-2">{pat.dateOfBirth}</td>
+                          <td className="px-4 py-2">{pat.email}</td>
+                          <td className="px-4 py-2">{pat.phoneNo}</td>
+                          <td className="px-4 py-2">{pat.address}</td>
+              
+                          <td className="px-4 py-2"><button className='btn btn-danger'>Delete</button></td>
+                      
+                        </tr>
+                      ))}
 
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>Thornton</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-
-                      </tr>
-                      <tr>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>20</td>
-                      </tr>
+                      
                     </tbody>
                   </Table>
                 </div>
