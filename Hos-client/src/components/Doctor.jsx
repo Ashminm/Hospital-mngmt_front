@@ -1,8 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tab, Nav, Table } from "react-bootstrap";
 import Select from "react-select";
+import { allDoc, postDoc } from '../services/CommenApi';
+import toast from 'react-hot-toast';
 
 function Doctor() {
+  const [doc, setDoc] = useState([]);
+  const [token, setToken] = useState("");
+  const [docDetails, setDocDetails] = useState({
+    department: "Cardiology",
+    doctor: "Card Doc",
+    date: "30-02-2025",
+    time: "02-30",
+    reason: "Lorem"
+  })
+  console.log("Doc= ", doc);
+
   const options = [
     { value: "cardiology", label: "Cardiology" },
     { value: "neurology", label: "Neurology" },
@@ -15,6 +28,58 @@ function Doctor() {
     control: (base) => ({ ...base, width: "24rem" }),
     menu: (base) => ({ ...base, width: "24rem" }),
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setToken(sessionStorage.getItem("token"))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      getAllDoc()
+    }
+    console.log(token);
+
+  }, [token]);
+
+  const getAllDoc = async () => {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      const res = await allDoc(headers);
+      if (res.status === 200) {
+        setDoc(res.data);
+      } else {
+        console.log("Failed to fetch doc:", res);
+      }
+    } catch (err) {
+      console.log("Error fetching doc:", err);
+    }
+  };
+
+  const handleDoc = async (e) => {
+    e.preventDefault();
+    console.log("Prev=", docDetails);
+
+    if (!docDetails.department) {
+      return toast.error("Please fill the details!");
+    } else {
+      const res = await postDoc(docDetails)
+      if (res.status === 200) {
+        toast.success("Scheduled!")
+        console.log("Succ= ", res);
+
+      } else {
+        toast.error("Scheduled Faild!")
+        console.log(res);
+
+
+      }
+    }
+  }
 
   return (
     <>
@@ -147,24 +212,33 @@ function Doctor() {
                     placeholder="Select Department"
                     isSearchable
                     styles={styles}
+                    onChange={(e) => { setDocDetails({ ...docDetails, department: e.target.value }) }}
+                    value={docDetails.department}
                   />
-                  <select className="w-96 border rounded p-2">
+                  <select className="w-96 border rounded p-2" onChange={(e) => { setDocDetails({ ...docDetails, doctor: e.target.value }) }}
+                    value={docDetails.doctor}>
                     <option>Select Doctor</option>
                   </select>
                   <input
                     type="date"
                     className="w-96 border rounded p-2"
+                    onChange={(e) => { setDocDetails({ ...docDetails, date: e.target.value }) }}
+                    value={docDetails.date}
                   />
                   <input
                     type="time"
                     className="w-96 border rounded p-2"
+                    onChange={(e) => { setDocDetails({ ...docDetails, time: e.target.value }) }}
+                    value={docDetails.time}
                   />
                   <textarea
                     className="w-96 border rounded p-2"
                     placeholder="Reason for Appointment"
+                    onChange={(e) => { setDocDetails({ ...docDetails, reason: e.target.value }) }}
+                    value={docDetails.reason}
                   />
                   <div className="">
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded">
+                    <button onClick={handleDoc} className="bg-blue-600 text-white px-4 py-2 rounded">
                       Schedule
                     </button>
                   </div>

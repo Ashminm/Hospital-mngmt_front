@@ -6,6 +6,7 @@ function Logout() {
     const navigate = useNavigate();
     const handleLogout = () => {
         sessionStorage.removeItem("role")
+        sessionStorage.removeItem("token")
         navigate("/", { replace: true });
     };
 

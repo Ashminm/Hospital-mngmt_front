@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
 import { loginApi } from '../services/CommenApi';
-
+import toast from 'react-hot-toast';
 function Auth() {
 
   const [userData, setUserData] = useState({
@@ -10,25 +10,23 @@ function Auth() {
     password: "",
     role: ""
   })
-  console.log(userData);
 
   const HandleLogin = async (e) => {
     e.preventDefault();
-    sessionStorage.setItem("role", userData.role)
-    navigate('/dashboard', { replace: true })
-    // if(!userData.username || !userData.password){
-    //  return alert("Fill all details");
-    // } else {
-    //   const res= await loginApi(userData)
-    //   if(res.status === 200){
-    //     alert("success")
-    //     sessionStorage.setItem("role",userData.role)
-    //     console.log("Login");
-    //     navigate('/dashboard', { replace: true })
-    //   }else{
-    //     alert("Login faild")
-    //   }
-    // }
+    if(!userData.username || !userData.password){
+     return toast.error("Please fill the details!");
+    } else {
+      const res= await loginApi(userData)
+      if(res.status === 200){
+        toast.success("Succesfully Login!")
+        sessionStorage.setItem("role",userData.role)
+        sessionStorage.setItem("token",res.data)
+        navigate('/dashboard', { replace: true })
+      }else{
+        toast.error("Login Faild!")
+        console.log(res); 
+      }
+    }
 
   }
 
